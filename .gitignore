@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Checkpoints / weights (host on HuggingFace, not git)
+*.pth
+*.pth.tar
+*.ckpt
+ckpt/
+work_dirs/
+
+# Datasets / generated data (not redistributed; see README)
+data/v2xreal/
+data/infos*/
+datasets/
+*.pkl
+# keep the small k-means anchor files needed by configs
+!data/kmeans/
+!data/kmeans/*.npy
+
+# Visualizations / debug dumps
+vis*/
+*_debug*/
+debug_*/
+*.log
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
