@@ -249,7 +249,7 @@ def create_nuscenes_infos(root_path,
     import json
 
     # json_path = "/home/user/nvme1/v2x/UniV2X_REAL/data/split_datas_V2XREAL/split_datas_V2XREAL.json"
-    json_path = "/home/user/nvme1/v2x/UniV2X_REAL/data/split_datas_V2XREAL/split_datas_V2XREAL_coop.json"
+    json_path = "data/split_datas_V2XREAL/split_datas_V2XREAL_coop.json"
 
     with open(json_path, "r", encoding="utf-8") as f:
         split = json.load(f)

@@ -2962,7 +2962,7 @@ if __name__ == "__main__":
 
     curDirectory = os.getcwd()
     basepath = os.path.basename(os.path.normpath(curDirectory))
-    if basepath != 'UniV2X_REAL':
+    if basepath != 'UniV2X_REAL' and os.path.isdir('UniV2X_REAL/'):
         os.chdir('UniV2X_REAL/')
 
     curDirectory = os.getcwd()
