@@ -52,6 +52,24 @@ export V2XREAL_DATA_ROOT=/path/to/v2xreal/data
 See the [VIPS repository](https://github.com/mickeykang16/VIPS) for the V2X-Real
 evaluation assets and the cooperative data layout.
 
+### Preparing the info files
+
+Training / open-loop eval read sparse info pickles from `./data/infos/`. Generate
+them from raw V2X-Real with the cooperative data-prep pipeline:
+
+```bash
+# place raw data first (git-ignored):
+#   ./datasets/v2xreal/                                       raw V2X-Real (SPD layout)
+#   ./data/split_datas_V2XREAL/split_datas_V2XREAL_coop.json  cooperative split
+#   ./data/nuscenes/                                          nuScenes can_bus assets
+bash scripts/create_data_v2xreal.sh
+```
+
+It runs four converters — `tools/spd_data_converter/{spd_to_uniad_REAL,
+spd_to_nuscenes_REAL, map_spd_to_nuscenes_REAL}.py` then
+`tools/sparse_data_converter/sparse_converter_w_map_parallel.py` — and copies the
+resulting `nuscenes_infos_{train,val,test}.pkl` into `./data/infos/`.
+
 ## Checkpoints
 
 Pretrained CoS-V2X weights are hosted on Hugging Face:

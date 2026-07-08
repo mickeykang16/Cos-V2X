@@ -17,7 +17,9 @@ work_dirs/
 # Datasets / generated data (not redistributed; see README)
 data/v2xreal/
 data/infos*/
-datasets/
+# Anchored to repo root: ignores the raw ./datasets/ data dir only, NOT the
+# source module projects/mmdet3d_plugin/datasets/ (which we DO track).
+/datasets/
 *.pkl
 # keep the small k-means anchor files needed by configs
 !data/kmeans/
