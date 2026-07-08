@@ -63,11 +63,66 @@ hf download mickeykang/CoS-V2X --local-dir checkpoints
 
 ## Training
 
-_Coming soon._
+CoS-V2X is trained in two stages (following SparseDrive). All commands run from
+the repo root.
+
+**1. Generate anchors (once).** The detection / map / motion / planning heads use
+k-means anchors computed from the training set. After preparing the V2X-Real
+infos (see [Data](#data)):
+
+```bash
+bash scripts/kmeans.sh          # writes anchors to data/kmeans/
+```
+
+**2. Train stage 1 → stage 2.** Stage 1 trains detection + mapping; stage 2 adds
+motion + planning on top of the stage-1 backbone/heads. The pipeline script runs
+both in sequence and automatically feeds the stage-1 checkpoint into stage 2:
+
+```bash
+bash scripts/train_stage1_2_6cams_v2x_top100.sh
+```
+
+Or run the two stages individually:
+
+```bash
+bash scripts/train_stage1_6cams_v2x_top100.sh     # stage 1: det + map
+bash scripts/train_stage2_6cams_v2x_top100.sh     # stage 2: + motion + planning
+```
+
+Configs live at `projects/configs/sparsedrive_small_stage{1,2}_6cams_v2x_top100.py`
+(top-100 selective infra fusion, `infra_topk=100`; ego status is **predicted**,
+not injected — `with_gt_ego_status=False`). Set `num_gpus`, `num_epochs`, and
+`data_root` in the config for your machine (default 4× GPU). One full pipeline
+(stage 1 + stage 2) takes ≈ 12 h on 4× A100-40 GB.
+
+> For a longer schedule, warm-start a fresh stage-1 run from a previous one by
+> setting `load_from` to the prior `latest.pth`; the released weights were built
+> from several such rounds.
 
 ## Open-loop evaluation
 
-_Coming soon._
+Open-loop evaluation reports the SparseDrive perception + prediction + planning
+metrics on the V2X-Real test set. Point the script at a stage-2 config and a
+checkpoint (edit the checkpoint path inside the script, or use a downloaded
+weight from [Checkpoints](#checkpoints)):
+
+```bash
+bash scripts/test_stage2_v2x.sh
+# tools/dist_test.sh <stage2 v2x_top100 config> <checkpoint> <num_gpus> --deterministic --eval bbox
+```
+
+Reported metrics:
+
+- **Detection** — NDS, mAP (+ per-class AP, translation / velocity errors)
+- **Mapping** — `mAP_normal` (lane / ped-crossing / boundary)
+- **Motion** — EPA, minADE, minFDE, miss-rate (car / pedestrian)
+- **Planning** — L2 (averaged over the horizon) and collision rate
+
+> Evaluation runs on the curated test subset used in the paper — a scene-token
+> filter is applied automatically in `test_mode`. When comparing models, make
+> sure they are all scored on the **same** subset, otherwise the numbers are not
+> comparable. For the cooperative **closed-loop** PDM score, use the
+> [VIPS benchmark](https://github.com/mickeykang16/VIPS).
 
 ## Use with the VIPS benchmark
 
