@@ -922,6 +922,6 @@ evaluation = dict(
 # Load stage1 V2X checkpoint – all det/map/fusion weights are pre-trained.
 # Only motion_plan_head weights are freshly initialised.
 # load_from = 'work_dirs/6cams_both_infra_v8_v2x_stage1_top100_fix/latest.pth'
-load_from = None
-resume_from = 'work_dirs/6cams_both_infra_v8_v2x_stage2_top100_fix/latest.pth'
+load_from = None      # the train_stage1_2 pipeline injects the stage-1 checkpoint
+resume_from = None    # via --cfg-options load_from=<stage1 latest.pth>
 # resume_from = 'work_dirs/6cams_both_infra_v7_v2x_stage2_top100/latest.pth'

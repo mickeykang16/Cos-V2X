@@ -35,7 +35,7 @@ log_config = dict(
         dict(type="TensorboardLoggerHook"),
     ],
 )
-load_from = "work_dirs/6cams_both_infra_v8_v2x_stage1_top100_fix/latest.pth"
+load_from = None      # train stage 1 from the ImageNet ResNet-50 backbone
 resume_from = None
 workflow = [("train", 1)]
 fp16 = dict(loss_scale=32.0)

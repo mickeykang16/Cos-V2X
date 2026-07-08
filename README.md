@@ -37,6 +37,9 @@ pip install -r requirement.txt
 
 # compile the deformable-aggregation CUDA op
 cd projects/mmdet3d_plugin/ops && python setup.py develop && cd ../../../
+
+# ImageNet ResNet-50 backbone init (stage-1 trains from this)
+mkdir -p ckpt && wget -P ckpt https://download.pytorch.org/models/resnet50-19c8e357.pth
 ```
 
 ## Data
@@ -50,7 +53,9 @@ export V2XREAL_DATA_ROOT=/path/to/v2xreal/data
 ```
 
 See the [VIPS repository](https://github.com/mickeykang16/VIPS) for the V2X-Real
-evaluation assets and the cooperative data layout.
+evaluation assets and the cooperative data layout. The raw sensor data is
+expected under `./datasets/v2xreal/` (the info files reference paths relative to
+the repo root, e.g. `datasets/v2xreal/data/...`).
 
 ### Preparing the info files
 
